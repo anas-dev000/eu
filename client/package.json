@@ -1,0 +1,37 @@
+{
+  "name": "autism-blog-client",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "framer-motion": "^12.9.2",
+    "lucide-react": "^1.7.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1",
+    "react-slick": "^0.30.3",
+    "slick-carousel": "^1.8.1",
+    "styled-components": "^6.1.13"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.11.1",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.2",
+    "eslint": "^9.11.1",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.12",
+    "globals": "^15.11.0",
+    "tailwindcss": "^4.2.2",
+    "vite": "^5.4.8"
+  }
+}
