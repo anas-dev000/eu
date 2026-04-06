@@ -92,6 +92,7 @@ const Interaction = () => {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState({});
   const [score, setScore] = useState(null);
+  const [isGameActive, setIsGameActive] = useState(false);
 
   /* handlers */
   const startQuiz = useCallback(() => {
@@ -123,41 +124,55 @@ const Interaction = () => {
     setCurrentQ(0);
     setAnswers({});
     setScore(null);
+    setIsGameActive(false);
+  }, []);
+
+  const startGame = useCallback(() => {
+    setIsGameActive(true);
   }, []);
 
   /* ── RENDER ── */
   return (
-    <Layout>
-      {/* ────── Hero / Title (always shown) ────── */}
-      <section className="section-block pb-0">
-        <div className="container-content">
-          <motion.div
-            className="flex items-center justify-center gap-3 mb-2"
-            variants={titleVariants}
-            initial="hidden"
-            animate="visible"
+    <Layout className={isGameActive && view === VIEW_GAME ? "bg-black/5" : ""}>
+      {/* ────── Hero / Title (hidden in active game focus mode) ────── */}
+      <AnimatePresence>
+        {(!isGameActive || view !== VIEW_GAME) && (
+          <motion.section 
+            className="section-block pb-0"
+            initial={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20, height: 0, padding: 0, overflow: "hidden" }}
+            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           >
-            <Users
-              size={32}
-              className="text-[var(--color-sky-calm-dark)]"
-            />
-            <h1 className="section-heading !mb-0 text-gradient">التفاعل</h1>
-          </motion.div>
-          <motion.p
-            className="text-intro"
-            variants={itemVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            نقدم لكم أدوات تفاعلية تساعد في تعزيز مهارات الطفل وتقديم تقييم
-            مبدئي لمستوى التواصل والتفاعل الاجتماعي.
-          </motion.p>
-        </div>
-      </section>
+            <div className="container-content">
+              <motion.div
+                className="flex items-center justify-center gap-3 mb-2"
+                variants={titleVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <Users
+                  size={32}
+                  className="text-[var(--color-sky-calm-dark)]"
+                />
+                <h1 className="section-heading !mb-0 text-gradient">التفاعل</h1>
+              </motion.div>
+              <motion.p
+                className="text-intro"
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                نقدم لكم أدوات تفاعلية تساعد في تعزيز مهارات الطفل وتقديم تقييم
+                مبدئي لمستوى التواصل والتفاعل الاجتماعي.
+              </motion.p>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
 
       {/* ────── Main Content Area ────── */}
-      <section className="section-block pt-2">
-        <div className="container-content max-w-5xl mx-auto">
+      <section className={`section-block pt-2 transition-all duration-700 ${isGameActive && view === VIEW_GAME ? "py-0" : ""}`}>
+        <div className={`container-content mx-auto transition-all duration-700 ${isGameActive && view === VIEW_GAME ? "max-w-none px-0" : "max-w-5xl"}`}>
           <AnimatePresence mode="wait">
             {/* ═══════════ LANDING ═══════════ */}
             {view === VIEW_LANDING && (
@@ -705,52 +720,132 @@ const Interaction = () => {
                 key="game"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30, transition: { duration: 0.3 } }}
-                transition={{ duration: 0.5 }}
+                exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.4 } }}
+                transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                className={isGameActive ? "w-full min-h-[90vh] flex flex-col" : ""}
               >
-                {/* Back button */}
-                <button
-                  onClick={goBack}
-                  className="flex items-center gap-2 text-sm font-bold text-[var(--color-ink-muted)] hover:text-[var(--color-sky-calm)] mb-6 transition-colors"
-                >
-                  <ArrowRight size={16} />
-                  <span>العودة</span>
-                </button>
+                {/* Back button (Only skip if in deep focus) */}
+                <div className={`${isGameActive ? "px-6 py-4 bg-white/80 backdrop-blur-md border-b border-soft flex items-center justify-between" : "mb-6"}`}>
+                  <button
+                    onClick={goBack}
+                    className="flex items-center gap-2 text-sm font-bold text-[var(--color-ink-muted)] hover:text-[var(--color-sky-calm)] transition-colors group"
+                  >
+                    <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                    <span>العودة للمنصة</span>
+                  </button>
 
-                <div
-                  className="card-base"
-                  style={{ borderTop: "3px solid var(--color-apricot)" }}
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, var(--color-apricot), var(--color-mint))",
-                      }}
-                    >
-                      <Gamepad2 size={24} className="text-white" />
+                  {isGameActive && (
+                    <div className="flex items-center gap-2">
+                       <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                       <span className="text-xs font-bold text-[var(--color-ink-muted)] uppercase tracking-wider">Focus Mode Active</span>
                     </div>
-                    <div>
-                      <h3 className="text-[var(--color-apricot-dark)] font-bold text-lg">
-                        لعبة التعرف على المشاعر
-                      </h3>
-                      <p className="text-xs text-[var(--color-ink-muted)]">
-                        ساعد طفلك في التعرف على المشاعر ومطابقة الأشكال
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="w-full rounded-[var(--radius-lg)] overflow-hidden shadow-md">
-                    <iframe
-                      src="/assets/games/interaction-game/index.html"
-                      title="لعبة التعرف على المشاعر"
-                      className="w-full border-none block"
-                      style={{ height: "70vh" }}
-                      allowFullScreen
-                    />
-                  </div>
+                  )}
                 </div>
+
+                <AnimatePresence mode="wait">
+                  {!isGameActive ? (
+                    /* ── PRE-PLAY PREPARATION SCREEN ── */
+                    <motion.div
+                      key="prepare"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 1.1 }}
+                      className="max-w-4xl mx-auto w-full"
+                    >
+                      <div 
+                        className="card-base p-12 text-center relative overflow-hidden"
+                        style={{ borderTop: "4px solid var(--color-apricot)" }}
+                      >
+                        {/* Decorative background blobs */}
+                        <div className="absolute top-[-10%] left-[-10%] w-64 h-64 bg-[var(--color-apricot-light)]/20 blur-[80px] rounded-full" />
+                        <div className="absolute bottom-[-10%] right-[-10%] w-64 h-64 bg-[var(--color-mint-light)]/20 blur-[80px] rounded-full" />
+
+                        <div className="relative z-10">
+                          <motion.div 
+                            className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-[var(--color-apricot)] to-[var(--color-mint)] flex items-center justify-center mx-auto mb-8 shadow-xl"
+                            animate={{ rotate: [0, 5, -5, 0] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                          >
+                            <Gamepad2 size={48} className="text-white" />
+                          </motion.div>
+
+                          <h2 className="text-3xl md:text-4xl font-black text-[var(--color-ink)] mb-4">
+                            لعبة التعرف على المشاعر
+                          </h2>
+                          <p className="text-lg text-[var(--color-ink-muted)] mb-10 max-w-2xl mx-auto leading-relaxed">
+                            مرحباً بك في عالم المشاعر! سنقوم معاً برحلة ممتعة لنتعلم كيف نميز بين الفرح، الحزن، والغضب من خلال مطابقة الأشكال والألوان.
+                          </p>
+
+                          {/* Quick sensory check / tips */}
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+                            <div className="p-4 rounded-2xl bg-white/50 border border-soft shadow-sm">
+                              <Sparkles size={24} className="mx-auto mb-2 text-[var(--color-apricot)]" />
+                              <span className="text-sm font-bold text-[var(--color-ink)]">ألوان هادئة</span>
+                            </div>
+                            <div className="p-4 rounded-2xl bg-white/50 border border-soft shadow-sm">
+                              <Shield size={24} className="mx-auto mb-2 text-[var(--color-mint-dark)]" />
+                              <span className="text-sm font-bold text-[var(--color-ink)]">بيئة آمنة</span>
+                            </div>
+                            <div className="p-4 rounded-2xl bg-white/50 border border-soft shadow-sm">
+                              <RotateCcw size={24} className="mx-auto mb-2 text-[var(--color-lavender)]" />
+                              <span className="text-sm font-bold text-[var(--color-ink)]">العب براحتك</span>
+                            </div>
+                          </div>
+
+                          <motion.button
+                            onClick={startGame}
+                            className="btn-primary-alt px-12 py-5 text-xl flex items-center gap-4 mx-auto group"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                          >
+                            <span>ابدأ اللعب الآن</span>
+                            <ArrowLeft size={24} className="transition-transform group-hover:-translate-x-2" />
+                          </motion.button>
+
+                          <p className="mt-8 text-xs text-[var(--color-ink-muted)] opacity-60">
+                            صُممت هذه اللعبة لتكون متوافقة مع احتياجات أبطالنا من ذوي التوحد
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    /* ── ACTIVE GAME THEATER MODE ── */
+                    <motion.div
+                      key="active-game"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="flex-1 flex flex-col bg-white"
+                    >
+                      <div className="flex-1 w-full relative group/iframe">
+                        {/* Soft frame shadow overlay inside */}
+                        <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.02)] z-10" />
+                        
+                        <iframe
+                          src="/assets/games/interaction-game/index.html"
+                          title="لعبة التعرف على المشاعر"
+                          className="w-full h-full border-none block"
+                          style={{ minHeight: "80vh" }}
+                          allowFullScreen
+                        />
+                      </div>
+                      
+                      {/* Footer bar for game controls/info */}
+                      <div className="p-4 bg-[var(--color-cloud)] border-t border-soft flex items-center justify-center gap-8">
+                        <div className="flex items-center gap-2 text-[var(--color-ink-muted)] text-sm font-medium">
+                          <Info size={16} />
+                          <span>هل تواجه مشكلة؟ قم بتحديث الصفحة</span>
+                        </div>
+                        <button 
+                          onClick={() => setIsGameActive(false)}
+                          className="text-sm font-bold text-[var(--color-lavender-dark)] hover:text-[var(--color-sky-calm)] transition-colors flex items-center gap-2"
+                        >
+                          <ChevronLeft size={16} />
+                          إعادة شاشة البداية
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             )}
           </AnimatePresence>
