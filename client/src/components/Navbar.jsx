@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../context/AuthContext";
 
 import Logo from "./Logo";
 
@@ -19,15 +20,23 @@ const navLinks = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
+
+  const handleLogout = () => {
+    logout();
+    closeMenu();
+    navigate("/login");
+  };
 
   return (
     <>
       <nav className="fixed top-0 right-0 left-0 z-50 glass border-b border-soft">
         <div className="container-content relative flex items-center h-12 md:h-16 lg:h-18">
-          {/* Logo Side - Occupies space to allow centering the middle part */}
+          {/* Logo Side */}
           <div className="flex-shrink-0 w-40">
             <Link
               to="/"
@@ -38,7 +47,7 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation - Absolute Centered or Flex Centered */}
+          {/* Desktop Navigation */}
           <div className="hidden lg:flex flex-1 justify-center items-center gap-1">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.to;
@@ -61,8 +70,36 @@ const Navbar = () => {
             })}
           </div>
 
-          {/* Mobile Menu Toggle / Balance space on the left */}
-          <div className="flex flex-1 lg:flex-none justify-end lg:w-40">
+          {/* Auth buttons (desktop) + Mobile toggle */}
+          <div className="flex flex-1 lg:flex-none justify-end lg:w-auto items-center gap-2">
+            {/* Desktop auth */}
+            <div className="hidden lg:flex items-center gap-2">
+              {user ? (
+                <>
+                  <Link
+                    to={user.role === "admin" ? "/admin" : "/dashboard"}
+                    className="nav-auth-link"
+                    id="nav-dashboard"
+                  >
+                    {user.role === "admin" ? "لوحة التحكم" : "حسابي"}
+                  </Link>
+                  <button onClick={handleLogout} className="nav-auth-btn nav-auth-btn--outline" id="nav-logout">
+                    خروج
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="nav-auth-btn nav-auth-btn--outline" id="nav-login">
+                    دخول
+                  </Link>
+                  <Link to="/register" className="nav-auth-btn nav-auth-btn--filled" id="nav-register">
+                    حساب جديد
+                  </Link>
+                </>
+              )}
+            </div>
+
+            {/* Mobile Menu Toggle */}
             <button
               className="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5 rounded-[var(--radius-md)] hover:bg-[var(--color-cloud-dark)] transition-all duration-300"
               onClick={toggleMenu}
@@ -156,6 +193,36 @@ const Navbar = () => {
                     );
                   })}
                 </nav>
+
+                {/* Mobile auth buttons */}
+                <div className="mt-6 pt-6 border-t border-[var(--color-cloud-dark)] flex flex-col gap-2">
+                  {user ? (
+                    <>
+                      <Link
+                        to={user.role === "admin" ? "/admin" : "/dashboard"}
+                        onClick={closeMenu}
+                        className="nav-auth-btn nav-auth-btn--filled w-full text-center"
+                      >
+                        {user.role === "admin" ? "لوحة التحكم" : "حسابي"}
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="nav-auth-btn nav-auth-btn--outline w-full"
+                      >
+                        تسجيل الخروج
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/login" onClick={closeMenu} className="nav-auth-btn nav-auth-btn--outline w-full text-center">
+                        تسجيل الدخول
+                      </Link>
+                      <Link to="/register" onClick={closeMenu} className="nav-auth-btn nav-auth-btn--filled w-full text-center">
+                        حساب جديد
+                      </Link>
+                    </>
+                  )}
+                </div>
               </div>
             </motion.div>
           </>
@@ -166,3 +233,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
