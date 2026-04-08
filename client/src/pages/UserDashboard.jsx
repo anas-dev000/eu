@@ -1,75 +1,102 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { Calendar } from "lucide-react";
+
+const STATUS_AR = {
+  pending: "قيد المراجعة",
+  confirmed: "مؤكد",
+  rejected: "مرفوض",
+  cancelled_by_user: "ملغاة",
+  cancelled_by_specialist: "ملغاة",
+};
 
 const UserDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [bookings, setBookings] = useState([]);
+
+  useEffect(() => {
+    const t = localStorage.getItem("token");
+    if (!t) return;
+    axios
+      .get("/api/sessions/my-bookings", { headers: { Authorization: `Bearer ${t}` } })
+      .then((res) => setBookings(res.data.bookings || []))
+      .catch(() => setBookings([]));
+  }, []);
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/");
   };
 
-  const quickLinks = [
-    { to: "/blog", label: "المدونة", icon: "📝" },
-    { to: "/communication", label: "التواصل", icon: "💬" },
-    { to: "/podcasts", label: "البودكاست", icon: "🎙️" },
-    { to: "/stories", label: "القصص", icon: "📖" },
-    { to: "/sessions", label: "الجلسات", icon: "🗓️" },
-    { to: "/games", label: "الألعاب", icon: "🎮" },
-    { to: "/interaction", label: "التفاعل", icon: "🤝" },
-  ];
-
   return (
-    <div className="page-shell">
+    <div className="page-shell sess-user-shell">
       <Navbar />
       <main className="page-main">
-        <div className="dashboard-container">
-          {/* Welcome header */}
-          <motion.div
-            className="dashboard-welcome"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            <div className="dashboard-welcome__text">
-              <h1>مرحباً بك 👋</h1>
-              <p className="dashboard-welcome__email">{user?.email}</p>
-            </div>
-            <button onClick={handleLogout} className="dashboard-logout-btn" id="user-logout">
-              تسجيل الخروج
-            </button>
-          </motion.div>
+        <motion.header
+          className="sess-user-header"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div>
+            <h1 className="sess-user-header__title">مرحباً</h1>
+            <p className="sess-user-header__email" dir="ltr">
+              {user?.email}
+            </p>
+          </div>
+          <button type="button" className="sess-btn sess-btn--ghost" onClick={handleLogout}>
+            تسجيل الخروج
+          </button>
+        </motion.header>
 
-          {/* Quick links */}
-          <motion.section
-            className="dashboard-section"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-          >
-            <h2 className="dashboard-section__title">الوصول السريع</h2>
-            <div className="dashboard-quick-grid">
-              {quickLinks.map((link, i) => (
-                <motion.div
-                  key={link.to}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 + i * 0.05 }}
-                >
-                  <Link to={link.to} className="dashboard-quick-item">
-                    <span className="dashboard-quick-item__icon">{link.icon}</span>
-                    <span className="dashboard-quick-item__label">{link.label}</span>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </motion.section>
-        </div>
+        <motion.section
+          className="sess-user-section"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+        >
+          <h2 className="sess-user-section__title">
+            <Calendar size={20} className="inline ml-2" />
+            جلساتي القادمة
+          </h2>
+          {bookings.filter((b) => b.status === "pending" || b.status === "confirmed").length === 0 ? (
+            <p className="sess-muted">
+              لا توجد جلسات نشطة.{" "}
+              <Link to="/sessions" className="sess-link">
+                احجز موعداً
+              </Link>
+            </p>
+          ) : (
+            <ul className="sess-user-bookings">
+              {bookings
+                .filter((b) => b.status === "pending" || b.status === "confirmed")
+                .slice(0, 4)
+                .map((b) => (
+                  <li key={b._id} className="sess-user-booking-row">
+                    <span className={`sess-pill sess-pill--${b.status}`}>{STATUS_AR[b.status]}</span>
+                    <span>
+                      {new Date(b.startAt).toLocaleString("ar-EG", {
+                        weekday: "short",
+                        day: "numeric",
+                        month: "short",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}{" "}
+                      — {b.patientFullName}
+                    </span>
+                  </li>
+                ))}
+            </ul>
+          )}
+          <Link to="/sessions" className="sess-btn sess-btn--primary sess-btn--sm mt-3 inline-block">
+            إدارة الجلسات والمحادثة
+          </Link>
+        </motion.section>
       </main>
       <Footer />
     </div>

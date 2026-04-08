@@ -521,6 +521,82 @@
   text-decoration: underline;
 }
 
+/* مودال تسجيل الدخول (يُعرض فوق الصفحة الحالية) */
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(45, 55, 72, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1rem, env(safe-area-inset-top, 0px)) 1rem max(1rem, env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.auth-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 22.5rem;
+  margin: auto;
+  background: #fff;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  padding: 1.65rem 1.4rem 1.35rem;
+  border: 1px solid rgba(124, 165, 216, 0.12);
+}
+.auth-modal__close {
+  position: absolute;
+  top: 0.45rem;
+  inset-inline-end: 0.45rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-cloud);
+  color: var(--color-ink);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+.auth-modal__close:hover {
+  background: var(--color-cloud-dark);
+}
+.auth-modal__header {
+  text-align: center;
+  margin-bottom: 1.15rem;
+  padding-inline-end: 1.5rem;
+}
+.auth-modal__title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-ink);
+  margin: 0 0 0.35rem;
+}
+.auth-modal__subtitle {
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+.auth-form--modal {
+  gap: 1rem;
+}
+.auth-modal__footer {
+  margin-top: 1.15rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(124, 165, 216, 0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 /* Auth form */
 .auth-form {
   display: flex;
@@ -1024,6 +1100,944 @@
 .admin-status-dot--pending {
   background: #D6B0A9;
 }
+
+/* ===== SESSIONS & BOOKING (sess-) ===== */
+.sess-sessions-layout.page-main {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+.sess-loading { text-align: center; padding: 2rem; color: var(--color-ink-muted); }
+.sess-muted { color: var(--color-ink-muted); font-size: 0.95rem; }
+.sess-note { color: var(--color-ink-light); }
+.sess-link { color: var(--color-sky-calm-dark); text-decoration: underline; }
+.sess-alert { padding: 0.75rem 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; }
+.sess-alert--error { background: rgba(214, 176, 169, 0.25); color: var(--color-ink); }
+
+.sess-guest-card {
+  background: linear-gradient(135deg, var(--color-mint-light) 0%, var(--color-sky-calm-light) 100%);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+.sess-guest-card__icon { margin: 0 auto 1rem; color: var(--color-sky-calm-dark); }
+.sess-guest-card__title { font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--color-ink); }
+.sess-guest-card__text { margin-bottom: 1.5rem; max-width: 28rem; margin-inline: auto; }
+.sess-guest-card__actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+
+.sess-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-calm);
+}
+.sess-btn--primary {
+  background: var(--color-sky-calm-dark);
+  color: white;
+}
+.sess-btn--primary:hover { filter: brightness(1.05); }
+.sess-btn--primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.sess-btn--ghost {
+  background: var(--color-cloud-dark);
+  color: var(--color-ink);
+}
+.sess-btn--ghost:hover { background: var(--color-cloud); }
+.sess-btn--sm { padding: 0.45rem 0.85rem; font-size: 0.875rem; }
+
+.sess-section-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  color: var(--color-ink);
+}
+.sess-slots-policy {
+  font-size: 0.82rem;
+  color: var(--color-ink-muted);
+  margin-bottom: 1.25rem;
+  max-width: 36rem;
+  line-height: 1.55;
+}
+
+.sess-booking-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+.sess-booking-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-cloud-dark);
+}
+.sess-booking-card__head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+.sess-booking-card__time { font-weight: 600; color: var(--color-sky-calm-dark); }
+.sess-booking-card__patient { margin: 0.5rem 0; }
+.sess-chat-wrap { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--color-cloud-dark); }
+
+.sess-pill {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.sess-pill--pending { background: var(--color-apricot-light); color: var(--color-apricot-dark); }
+.sess-pill--confirmed { background: var(--color-mint-light); color: var(--color-mint-dark); }
+.sess-pill--rejected,
+.sess-pill--cancelled_by_user,
+.sess-pill--cancelled_by_specialist { background: var(--color-cloud-dark); color: var(--color-ink-muted); }
+
+/* قسم الحجز: عرض أكبر من الحاوية الافتراضية عند الشاشات الواسعة */
+.sess-booking-block {
+  max-width: min(85rem, calc(100vw - 2rem));
+}
+
+/* —— اختيار الموعد: يوم ثم ساعة —— */
+.sess-pick-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+}
+
+.sess-pick-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, var(--color-mint-light) 0%, var(--color-sky-calm-light) 100%);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.sess-pick-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-ink-muted);
+  transition: var(--transition-calm);
+}
+.sess-pick-step.is-active {
+  color: var(--color-sky-calm-dark);
+}
+.sess-pick-step.is-done {
+  color: var(--color-mint-dark);
+}
+.sess-pick-step__num {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  background: var(--color-cloud-dark);
+  color: var(--color-ink);
+}
+.sess-pick-step.is-active .sess-pick-step__num {
+  background: var(--color-sky-calm-dark);
+  color: white;
+}
+.sess-pick-step.is-done .sess-pick-step__num {
+  background: var(--color-mint);
+  color: white;
+}
+.sess-pick-step__line {
+  width: 2rem;
+  height: 2px;
+  background: var(--color-cloud-dark);
+  border-radius: 1px;
+}
+
+.sess-pick-panel {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: 1.85rem 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-cloud-dark);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.sess-pick-panel--times {
+  min-height: 8rem;
+}
+.sess-pick-panel__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+  color: var(--color-ink);
+}
+.sess-pick-panel__icon {
+  color: var(--color-sky-calm-dark);
+  flex-shrink: 0;
+}
+.sess-pick-hint {
+  font-size: 0.8rem;
+  color: var(--color-ink-muted);
+  margin-bottom: 1rem;
+}
+
+/* خطوة ١: ستة أعمدة بعرض متساوٍ — نفس عرض لوحة الخطوة ٢ */
+.sess-day-strip {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.65rem 0.85rem;
+  padding-bottom: 0.35rem;
+  padding-top: 0.35rem;
+  width: 100%;
+}
+
+.sess-day-card {
+  width: 100%;
+  min-width: 0;
+  padding: 0.95rem 0.45rem;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-cloud-dark);
+  background: var(--color-cloud);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  transition: var(--transition-calm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  color: var(--color-ink);
+}
+.sess-day-card:hover {
+  border-color: var(--color-sky-calm-light);
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.sess-day-card.is-selected {
+  border-color: var(--color-sky-calm-dark);
+  background: linear-gradient(180deg, var(--color-sky-calm-light) 0%, white 55%);
+  box-shadow: var(--shadow-glow);
+}
+.sess-day-card__dow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-ink-muted);
+  text-align: center;
+  line-height: 1.2;
+}
+.sess-day-card__num {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-sky-calm-dark);
+}
+.sess-day-card__mon {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-ink-light);
+}
+.sess-day-card__badge {
+  margin-top: 0.25rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-full);
+  background: var(--color-mint-light);
+  color: var(--color-mint-dark);
+}
+
+.sess-pick-placeholder {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--color-ink-muted);
+  font-size: 0.95rem;
+  background: var(--color-cloud);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--color-cloud-dark);
+}
+.sess-time-board__empty {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+}
+
+.sess-time-board {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.sess-time-board__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-cloud-dark);
+}
+.sess-time-board__date {
+  font-weight: 700;
+  color: var(--color-sky-calm-dark);
+  font-size: 0.95rem;
+}
+.sess-time-board__change-day {
+  border: none;
+  background: transparent;
+  color: var(--color-sky-calm-dark);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-family: var(--font-heading);
+}
+.sess-time-board__change-day:hover {
+  color: var(--color-ink);
+}
+
+/* خطوة ٢: خمسة أعمدة متساوية؛ صفّان لعشر فترات ثم صفوف إضافية إن وُجدت */
+.sess-time-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.7rem 0.75rem;
+  width: 100%;
+}
+@media (max-width: 520px) {
+  .sess-time-grid {
+    gap: 0.5rem 0.45rem;
+  }
+  .sess-time-slot {
+    padding: 0.65rem 0.35rem;
+  }
+  .sess-time-slot__clock {
+    font-size: 1rem;
+  }
+}
+
+.sess-time-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.85rem 0.5rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-lavender-light);
+  background: linear-gradient(145deg, white 0%, var(--color-lavender-light) 100%);
+  cursor: pointer;
+  font-family: var(--font-heading);
+  transition: var(--transition-calm);
+}
+.sess-time-slot:hover:not(:disabled) {
+  border-color: var(--color-lavender-dark);
+  transform: scale(1.02);
+  box-shadow: var(--shadow-sm);
+}
+.sess-time-slot--disabled,
+.sess-time-slot:disabled {
+  opacity: 0.48;
+  cursor: not-allowed;
+  transform: none;
+  border-color: var(--color-cloud-dark);
+  background: var(--color-cloud);
+  box-shadow: none;
+}
+.sess-time-slot--disabled .sess-time-slot__clock,
+.sess-time-slot:disabled .sess-time-slot__clock {
+  color: var(--color-ink-muted);
+}
+.sess-time-slot--disabled .sess-time-slot__meta,
+.sess-time-slot:disabled .sess-time-slot__meta {
+  color: var(--color-ink-muted);
+}
+.sess-time-grid-hint {
+  font-size: 0.8rem;
+  color: var(--color-ink-muted);
+  margin: -0.35rem 0 0.85rem;
+  line-height: 1.45;
+}
+.sess-time-slot__clock {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--color-lavender-dark);
+  font-variant-numeric: tabular-nums;
+}
+.sess-time-slot__meta {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  text-align: center;
+}
+
+/* —— صفحة الجلسات: موبايل وشاشات ضيقة (الديسكتوب دون تغيير جوهري) —— */
+@media (max-width: 640px) {
+  .sess-sessions-layout .section-block {
+    padding: 2rem 0;
+  }
+  .sess-sessions-layout .section-block.pt-0 {
+    padding-top: 0;
+  }
+  .sess-sessions-layout .section-block.pb-16 {
+    padding-bottom: 2.5rem;
+  }
+  .sess-sessions-layout .section-heading {
+    font-size: clamp(1.2rem, 5.5vw, 1.55rem);
+    line-height: 1.35;
+    overflow-wrap: break-word;
+  }
+  .sess-sessions-lead {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    max-width: none !important;
+  }
+  .sess-booking-block {
+    max-width: 100%;
+    padding-inline: 0;
+  }
+  .sess-sessions-layout .container-content {
+    padding-inline: clamp(0.75rem, 4vw, 1.25rem);
+  }
+  .sess-section-title {
+    font-size: 1.05rem;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .sess-slots-policy {
+    max-width: none;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .sess-pick-flow {
+    gap: 1.15rem;
+  }
+  .sess-pick-steps {
+    padding: 0.65rem 0.75rem;
+    border-radius: var(--radius-lg);
+  }
+  .sess-pick-step {
+    font-size: 0.72rem;
+  }
+  .sess-pick-panel {
+    padding: 1.1rem 0.85rem;
+    border-radius: var(--radius-lg);
+  }
+  .sess-pick-panel__label {
+    font-size: 0.95rem;
+  }
+  .sess-pick-hint {
+    font-size: 0.74rem;
+    margin-bottom: 0.75rem;
+  }
+  .sess-day-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.55rem 0.6rem;
+  }
+  .sess-day-card {
+    padding: 0.72rem 0.35rem;
+    min-height: 5.25rem;
+    justify-content: center;
+    border-width: 1.5px;
+  }
+  .sess-day-card__dow {
+    font-size: 0.6rem;
+    line-height: 1.15;
+  }
+  .sess-day-card__num {
+    font-size: 1.45rem;
+  }
+  .sess-day-card__mon {
+    font-size: 0.62rem;
+  }
+  .sess-day-card__badge {
+    font-size: 0.55rem;
+    padding: 0.12rem 0.3rem;
+    margin-top: 0.15rem;
+  }
+  .sess-time-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 0.5rem;
+  }
+  .sess-time-slot {
+    padding: 0.62rem 0.3rem;
+    min-height: 3.35rem;
+  }
+  .sess-time-slot__clock {
+    font-size: 0.95rem;
+  }
+  .sess-time-slot__meta {
+    font-size: 0.58rem;
+    line-height: 1.2;
+  }
+  .sess-time-board__head {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0.65rem;
+    padding-bottom: 0.55rem;
+  }
+  .sess-time-board__date {
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+  .sess-time-grid-hint {
+    font-size: 0.72rem;
+    margin: 0 0 0.65rem;
+  }
+  .sess-pick-placeholder {
+    padding: 1.25rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  .sess-booking-card {
+    padding: 1rem 0.85rem;
+  }
+  .sess-booking-card__time {
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+  .sess-guest-card {
+    padding: 1.35rem 1rem;
+    border-radius: var(--radius-lg);
+  }
+  .sess-guest-card__title {
+    font-size: 1.1rem;
+  }
+  .sess-guest-card__text {
+    font-size: 0.9rem;
+    margin-bottom: 1.15rem;
+  }
+  .sess-guest-card__actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .sess-guest-card__actions .sess-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) and (min-width: 481px) {
+  .sess-day-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .sess-booking-block {
+    max-width: 100%;
+  }
+  .sess-day-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .sess-time-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .sess-pick-steps {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  .sess-pick-step__line {
+    display: none;
+  }
+  .sess-pick-step {
+    justify-content: center;
+  }
+}
+
+@media (hover: none) {
+  .sess-day-card:hover {
+    transform: none;
+  }
+  .sess-time-slot:hover:not(:disabled) {
+    transform: none;
+  }
+}
+
+.sess-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(45, 55, 72, 0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem;
+  overflow-y: auto;
+}
+.sess-modal-overlay--center {
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+.sess-modal {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
+  max-width: 32rem;
+  width: 100%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+}
+.sess-modal--booking {
+  max-width: min(52rem, calc(100vw - 2rem));
+  width: 100%;
+  margin: 0;
+  padding: 1.35rem 1.65rem 1.25rem;
+  box-sizing: border-box;
+}
+.sess-modal-overlay--center .sess-modal:not(.sess-modal--booking) {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.sess-modal__title { margin-bottom: 0.5rem; }
+.sess-modal__sub { color: var(--color-ink-muted); margin-bottom: 1rem; font-size: 0.9rem; }
+.sess-modal--booking .sess-modal__title {
+  margin-bottom: 0.2rem;
+  font-size: 1.2rem;
+}
+.sess-modal--booking .sess-modal__sub {
+  margin-bottom: 0.55rem;
+  font-size: 0.82rem;
+}
+.sess-modal--booking .sess-alert {
+  margin-bottom: 0.45rem;
+  font-size: 0.85rem;
+}
+.sess-modal__actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem; }
+.sess-modal--booking .sess-modal__actions {
+  margin-top: 0.65rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-cloud-dark);
+}
+
+.sess-form { display: flex; flex-direction: column; gap: 0.85rem; }
+.sess-form--booking {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem 1.1rem;
+  align-content: start;
+}
+.sess-form--booking > .sess-booking-form-error,
+.sess-form--booking > .sess-label--full,
+.sess-form--booking > .sess-form-row,
+.sess-form--booking > .sess-modal__actions {
+  grid-column: 1 / -1;
+}
+.sess-booking-form-error {
+  margin: 0 0 0.15rem;
+}
+.sess-label { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.875rem; font-weight: 600; color: var(--color-ink); }
+.sess-modal--booking .sess-label {
+  gap: 0.2rem;
+  font-size: 0.8rem;
+}
+.sess-label--inline { flex-direction: row; align-items: center; gap: 0.5rem; }
+.sess-input, .sess-textarea {
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-cloud-dark);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+}
+.sess-modal--booking .sess-input,
+.sess-modal--booking .sess-textarea {
+  padding: 0.42rem 0.65rem;
+  font-size: 0.875rem;
+}
+.sess-textarea--compact {
+  min-height: 2.6rem;
+  line-height: 1.35;
+  resize: vertical;
+  field-sizing: content;
+}
+@supports not (field-sizing: content) {
+  .sess-textarea--compact {
+    max-height: 5rem;
+  }
+}
+.sess-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.sess-form--booking .sess-form-row {
+  gap: 0.45rem 1.1rem;
+}
+@media (max-width: 560px) { .sess-form-row { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .sess-form--booking {
+    grid-template-columns: 1fr;
+  }
+  .sess-form--booking > .sess-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* مودال الحجز على الموبايل: يفوق القواعد أعلاه لأنه يأتي بعد .sess-modal--booking */
+@media (max-width: 640px) {
+  .sess-modal-overlay.sess-modal-overlay--center {
+    align-items: flex-end;
+    justify-content: center;
+    padding: max(0.5rem, env(safe-area-inset-top, 0px))
+      max(0.5rem, env(safe-area-inset-right, 0px))
+      max(0.5rem, env(safe-area-inset-bottom, 0px))
+      max(0.5rem, env(safe-area-inset-left, 0px));
+  }
+  .sess-modal.sess-modal--booking {
+    max-width: 100%;
+    width: 100%;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    max-height: min(92dvh, 92vh);
+    overflow-y: auto;
+    padding: 1.1rem 1rem 1rem;
+  }
+  .sess-modal--booking .sess-modal__title {
+    font-size: 1.05rem;
+  }
+}
+
+.sess-chat {
+  margin-top: 0.75rem;
+  border: 1px solid var(--color-cloud-dark);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-cloud);
+  direction: rtl;
+  text-align: right;
+}
+.sess-chat__messages {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  direction: rtl;
+}
+.sess-chat__empty {
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+  text-align: center;
+  padding: 1rem;
+}
+.sess-chat__bubble {
+  max-width: 92%;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  background: white;
+  border: 1px solid var(--color-cloud-dark);
+  text-align: start;
+}
+/* RTL: بداية السطر = يمين — رسائلك؛ الأخصائي من الطرف الآخر */
+.sess-chat__bubble--user {
+  align-self: flex-start;
+}
+.sess-chat__bubble--spec {
+  align-self: flex-end;
+  background: var(--color-mint-light);
+  border-color: var(--color-mint);
+}
+.sess-chat__meta {
+  font-size: 0.7rem;
+  color: var(--color-ink-muted);
+  display: block;
+  margin-bottom: 0.25rem;
+  text-align: inherit;
+}
+.sess-chat__body {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: 0.9rem;
+  text-align: start;
+  unicode-bidi: plaintext;
+}
+.sess-chat__form {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: white;
+  border-top: 1px solid var(--color-cloud-dark);
+  direction: rtl;
+}
+.sess-chat__input {
+  flex: 1;
+  border: 1px solid var(--color-cloud-dark);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.65rem;
+  text-align: start;
+}
+.sess-chat__send {
+  padding: 0.5rem 1rem;
+  background: var(--color-sky-calm-dark);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+}
+.sess-chat__err {
+  font-size: 0.8rem;
+  color: #c53030;
+  padding: 0 0.5rem 0.5rem;
+  margin: 0;
+  text-align: right;
+}
+.sess-chat-blocked {
+  font-size: 0.85rem;
+  color: var(--color-ink-muted);
+  padding: 0.5rem;
+  text-align: right;
+}
+
+/* User dashboard (sessions-themed) */
+/* padding-top يتجاوز الـ navbar الثابت (h-12 → lg:h-18) */
+.sess-user-shell .page-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 6.25rem 1rem 3rem 1rem;
+}
+.sess-user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 2px solid var(--color-sky-calm-light);
+}
+.sess-user-header__title { font-size: 1.5rem; }
+.sess-user-header__email { color: var(--color-ink-muted); font-size: 0.9rem; }
+.sess-user-section { margin-bottom: 2rem; }
+.sess-user-section__title { font-size: 1.15rem; margin-bottom: 1rem; display: flex; align-items: center; }
+.sess-user-bookings { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.sess-user-booking-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.65rem 0.85rem;
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-cloud-dark);
+}
+.sess-user-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+.sess-user-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1rem;
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-cloud-dark);
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: var(--transition-calm);
+}
+.sess-user-tile:hover { border-color: var(--color-sky-calm); box-shadow: var(--shadow-sm); }
+.sess-user-tile__icon { color: var(--color-sky-calm-dark); }
+
+/* Admin sessions dashboard */
+.sess-admin-shell .page-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 6.25rem 1rem 3rem 1rem;
+}
+.sess-admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.sess-admin-header__title { font-size: 1.4rem; color: var(--color-ink); }
+.sess-admin-header__email { color: var(--color-ink-muted); font-size: 0.9rem; }
+.sess-admin-header__actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.sess-admin-tabs {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  padding: 0.35rem;
+  background: var(--color-cloud-dark);
+  border-radius: var(--radius-lg);
+}
+.sess-admin-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-ink-light);
+  transition: var(--transition-calm);
+}
+.sess-admin-tab.is-active {
+  background: white;
+  color: var(--color-sky-calm-dark);
+  box-shadow: var(--shadow-sm);
+}
+.sess-admin-panel { margin-bottom: 2rem; }
+.sess-admin-hint { font-size: 0.85rem; color: var(--color-ink-muted); margin-bottom: 1rem; line-height: 1.6; }
+.sess-admin-bookings { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+.sess-admin-booking {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  border: 1px solid var(--color-cloud-dark);
+  box-shadow: var(--shadow-sm);
+}
+.sess-admin-booking__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.sess-admin-booking__time { display: block; font-weight: 600; margin: 0.35rem 0; color: var(--color-sky-calm-dark); }
+.sess-admin-booking__meta { font-size: 0.85rem; color: var(--color-ink-muted); }
+.sess-admin-booking__concerns { margin-top: 0.5rem; font-size: 0.9rem; color: var(--color-ink-light); }
+.sess-admin-booking__actions { display: flex; flex-direction: column; gap: 0.4rem; align-items: stretch; min-width: 140px; }
+
+.sess-settings-form { max-width: 36rem; display: flex; flex-direction: column; gap: 1rem; }
+.sess-fieldset { border: 1px solid var(--color-cloud-dark); border-radius: var(--radius-md); padding: 1rem; }
+.sess-fieldset legend { padding: 0 0.35rem; font-weight: 600; font-size: 0.9rem; }
+.sess-day-toggles { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; }
+.sess-day-toggle { display: flex; align-items: center; gap: 0.35rem; font-size: 0.875rem; cursor: pointer; }
+
+.sess-users-table-wrap { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid var(--color-cloud-dark); }
+.sess-users-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.sess-users-table th, .sess-users-table td { padding: 0.65rem 0.85rem; text-align: right; border-bottom: 1px solid var(--color-cloud-dark); }
+.sess-users-table thead { background: var(--color-cloud); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {

@@ -21,7 +21,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+  const { user, logout, openLoginModal } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -29,7 +29,7 @@ const Navbar = () => {
   const handleLogout = () => {
     logout();
     closeMenu();
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -77,7 +77,7 @@ const Navbar = () => {
               {user ? (
                 <>
                   <Link
-                    to={user.role === "admin" ? "/admin" : "/dashboard"}
+                    to={user.role === "admin" ? "/admin/dashboard" : "/dashboard"}
                     className="nav-auth-link"
                     id="nav-dashboard"
                   >
@@ -89,9 +89,14 @@ const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="nav-auth-btn nav-auth-btn--outline" id="nav-login">
+                  <button
+                    type="button"
+                    className="nav-auth-btn nav-auth-btn--outline"
+                    id="nav-login"
+                    onClick={openLoginModal}
+                  >
                     دخول
-                  </Link>
+                  </button>
                   <Link to="/register" className="nav-auth-btn nav-auth-btn--filled" id="nav-register">
                     حساب جديد
                   </Link>
@@ -199,7 +204,7 @@ const Navbar = () => {
                   {user ? (
                     <>
                       <Link
-                        to={user.role === "admin" ? "/admin" : "/dashboard"}
+                        to={user.role === "admin" ? "/admin/dashboard" : "/dashboard"}
                         onClick={closeMenu}
                         className="nav-auth-btn nav-auth-btn--filled w-full text-center"
                       >
@@ -214,9 +219,16 @@ const Navbar = () => {
                     </>
                   ) : (
                     <>
-                      <Link to="/login" onClick={closeMenu} className="nav-auth-btn nav-auth-btn--outline w-full text-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          closeMenu();
+                          openLoginModal();
+                        }}
+                        className="nav-auth-btn nav-auth-btn--outline w-full text-center"
+                      >
                         تسجيل الدخول
-                      </Link>
+                      </button>
                       <Link to="/register" onClick={closeMenu} className="nav-auth-btn nav-auth-btn--filled w-full text-center">
                         حساب جديد
                       </Link>

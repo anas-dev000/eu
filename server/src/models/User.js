@@ -25,6 +25,12 @@ const userSchema = new mongoose.Schema(
     verifyToken: {
       type: String,
     },
+    verifyCode: {
+      type: String,
+    },
+    verifyCodeExpires: {
+      type: Date,
+    },
     resetToken: {
       type: String,
     },

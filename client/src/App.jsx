@@ -1,7 +1,8 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import RequireAuth from "./components/RequireAuth";
+import LoginModal from "./components/LoginModal";
 
 // Public pages
 import Home from "./pages/Home";
@@ -17,10 +18,10 @@ import Stories from "./pages/Stories";
 // Auth pages
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import AdminRegister from "./pages/AdminRegister";
+import SpecialistLogin from "./pages/SpecialistLogin";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import VerifyEmail from "./pages/VerifyEmail";
+import VerifyCode from "./pages/VerifyCode";
 
 // Dashboards
 import UserDashboard from "./pages/UserDashboard";
@@ -30,6 +31,7 @@ const App = () => {
   return (
     <Router>
       <AuthProvider>
+        <LoginModal />
         <Routes>
           {/* Public */}
           <Route path="/" element={<Home />} />
@@ -45,10 +47,12 @@ const App = () => {
           {/* Auth */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<AdminRegister />} />
+          <Route path="/specialist/login" element={<SpecialistLogin />} />
+          <Route path="/admin" element={<Navigate to="/specialist/login" replace />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
-          <Route path="/verify-email/:token" element={<VerifyEmail />} />
+          <Route path="/verify-code" element={<VerifyCode />} />
+          <Route path="/verify-email/:token" element={<Navigate to="/verify-code" replace />} />
 
           {/* Protected: User */}
           <Route
@@ -64,7 +68,7 @@ const App = () => {
           <Route
             path="/admin/dashboard"
             element={
-              <RequireAuth allowedRoles={["admin"]}>
+              <RequireAuth allowedRoles={["admin"]} loginPath="/specialist/login">
                 <AdminDashboard />
               </RequireAuth>
             }

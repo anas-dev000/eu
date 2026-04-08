@@ -1,20 +1,20 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import AuthFormWrapper from "../components/AuthFormWrapper";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
     if (password !== confirmPassword) {
       setError("كلمتا المرور غير متطابقتين");
@@ -28,11 +28,9 @@ const Register = () => {
 
     setLoading(true);
     try {
-      await register(email, password, "user");
-      setSuccess("تم التسجيل بنجاح! تحقق من بريدك الإلكتروني لتفعيل الحساب.");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
+      const registeredEmail = email.trim().toLowerCase();
+      await register(registeredEmail, password);
+      navigate("/verify-code", { state: { email: registeredEmail }, replace: true });
     } catch (err) {
       setError(err.response?.data?.message || "حدث خطأ أثناء التسجيل");
     } finally {
@@ -54,12 +52,6 @@ const Register = () => {
             <span>{error}</span>
           </div>
         )}
-        {success && (
-          <div className="auth-alert auth-alert--success">
-            <span>{success}</span>
-          </div>
-        )}
-
         <div className="auth-field">
           <label htmlFor="register-email" className="auth-label">
             البريد الإلكتروني

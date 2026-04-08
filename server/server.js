@@ -1,38 +1,59 @@
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-import authRouter from "./authRouter.js";
-import path from "path";
+import app from "./src/app.js";
 
-dotenv.config();
+// Default 5050: port 5000 is often reserved on Windows (Hyper-V / WinNAT).
+const PORT = Number(process.env.PORT) || 5050;
+const HOST = process.env.HOST || "127.0.0.1";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/eu_auth";
 
-const app = express();
-const PORT = process.env.PORT || 5000;
+async function start() {
+  if (process.env.NODE_ENV === "test") {
+    return;
+  }
 
-// Middleware
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173", credentials: true }));
-app.use(express.json());
-app.use(cookieParser());
+  try {
+    await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 });
+    console.log("MongoDB connected");
+    try {
+      const { ensureDefaultAdmin } = await import("./src/services/ensureDefaultAdmin.js");
+      await ensureDefaultAdmin();
+    } catch (authSeedErr) {
+      console.error("[auth] Default admin seed error:", authSeedErr.message);
+    }
+    try {
+      const { ensureSessionSettingsSeed, repairWorkDaysFromLegacyAdminDefault } = await import(
+        "./src/services/sessionSeed.js"
+      );
+      await ensureSessionSettingsSeed();
+      await repairWorkDaysFromLegacyAdminDefault();
+    } catch (seedErr) {
+      console.error("[sessions] Seed error:", seedErr.message);
+    }
+  } catch (err) {
+    console.error("MongoDB connection failed:", err.message);
+    console.error(`
+Fix: start MongoDB on 127.0.0.1:27017, or set MONGODB_URI in server/.env (e.g. Atlas).
+  • Windows: install/start "MongoDB Community Server", or:
+  • Docker: docker run -d -p 27017:27017 --name mongo mongo:latest
+`);
+    process.exit(1);
+  }
 
-// Connect to MongoDB (local)
-mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/eu_auth")
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
-
-// Routes
-app.use("/api/auth", authRouter);
-
-// Serve static assets (if any)
-app.use("/assets", express.static(path.join(process.cwd(), "public")));
-
-// Only listen if not in test mode
-if (process.env.NODE_ENV !== "test") {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  const server = app.listen(PORT, HOST, () => {
+    console.log(`Server running at http://${HOST}:${PORT}`);
+  });
+  server.on("error", (err) => {
+    if (err.code === "EACCES") {
+      console.error(
+        `Cannot listen on ${HOST}:${PORT} (permission denied). On Windows, avoid port 5000 or pick another PORT in .env.`
+      );
+    } else if (err.code === "EADDRINUSE") {
+      console.error(`Port ${PORT} is already in use. Set a different PORT in .env.`);
+    }
+    throw err;
   });
 }
+
+start();
 
 export default app;
