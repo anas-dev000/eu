@@ -10,13 +10,13 @@ import {
 } from "../utils/animations";
 
 const teamMembers = [
-  { avatar: "/assets/images/avatars/boy1.png", title: "مطور واجهات" },
-  { avatar: "/assets/images/avatars/girl1.png", title: "أخصائية توحد" },
-  { avatar: "/assets/images/avatars/boy2.png", title: "مخطط محتوى" },
-  { avatar: "/assets/images/avatars/girl1.png", title: "مصممة تعليمية" },
-  { avatar: "/assets/images/avatars/girl1.png", title: "باحثة علمية" },
-  { avatar: "/assets/images/avatars/girl1.png", title: "أخصائية تواصل" },
-  { avatar: "/assets/images/avatars/girl1.png", title: "مديرة المشروع" },
+  { name: "أميرة نصـر حـسـن", avatar: "/assets/images/avatars/girl1.png" },
+  { name: "آيات محمـد إبراهيـم", avatar: "/assets/images/avatars/girl1.png" },
+  { name: "حبيبة أسامة أحمـد", avatar: "/assets/images/avatars/girl1.png" },
+  { name: "عمر محمـد أحمـد", avatar: "/assets/images/avatars/boy1.png" },
+  { name: "سارة محمـد فـوزي", avatar: "/assets/images/avatars/girl1.png" },
+  { name: "مصطـفى محمـد حـسـن", avatar: "/assets/images/avatars/boy2.png" },
+  { name: "هايدي جـمال فايـز", avatar: "/assets/images/avatars/girl1.png" },
 ];
 
 const goals = [
@@ -30,14 +30,29 @@ const goals = [
 ];
 
 const pages = [
-  { name: "الصفحة الرئيسية", desc: "تحتوي على محتويات المشروع والمنصة الأساسية." },
+  {
+    name: "الصفحة الرئيسية",
+    desc: "تحتوي على محتويات المشروع والمنصة الأساسية.",
+  },
   { name: "من نحن", desc: "تعرّف بالفريق الخاص بالمشروع." },
-  { name: "المدونة", desc: "طرق التعامل مع طيف التوحد في التمارين اليومية والحياتية." },
-  { name: "البودكاست", desc: "تتحدث عن مستويات التوحد وطريقة التعامل مع كل مستوى." },
+  {
+    name: "المدونة",
+    desc: "طرق التعامل مع طيف التوحد في التمارين اليومية والحياتية.",
+  },
+  {
+    name: "البودكاست",
+    desc: "تتحدث عن مستويات التوحد وطريقة التعامل مع كل مستوى.",
+  },
   { name: "الأدوات التعليمية", desc: "أدوات تعليمية وألعاب نفعية للفئة." },
-  { name: "القصص الرقمية", desc: "قصص رقمية منتجة بالذكاء الاصطناعي عن طيف التوحد." },
+  {
+    name: "القصص الرقمية",
+    desc: "قصص رقمية منتجة بالذكاء الاصطناعي عن طيف التوحد.",
+  },
   { name: "أساليب التفاعل", desc: "أساليب التعامل والتفاعل مع الأطفال." },
-  { name: "الألعاب التفاعلية", desc: "ألعاب يتفاعل معها الطلاب ويستفيدون منها." },
+  {
+    name: "الألعاب التفاعلية",
+    desc: "ألعاب يتفاعل معها الطلاب ويستفيدون منها.",
+  },
 ];
 
 const About = () => {
@@ -90,7 +105,9 @@ const About = () => {
                 <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[var(--color-mint)] text-white text-xs font-bold flex items-center justify-center mt-0.5">
                   {index + 1}
                 </span>
-                <p className="text-sm leading-relaxed !text-[var(--color-ink)]">{goal}</p>
+                <p className="text-sm leading-relaxed !text-[var(--color-ink)]">
+                  {goal}
+                </p>
               </motion.div>
             ))}
           </motion.div>
@@ -165,7 +182,7 @@ const About = () => {
             whileInView="visible"
             viewport={viewportOnce}
           >
-            فريق العمل
+            فريق التنفيذ
           </motion.h2>
           <motion.div
             className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center"
@@ -177,7 +194,7 @@ const About = () => {
             {teamMembers.map((member, index) => (
               <motion.div
                 key={index}
-                className={`card-base flex flex-col items-center text-center p-4 min-h-[140px] w-full max-w-[200px] ${
+                className={`card-base flex flex-col items-center text-center p-4 min-h-[180px] w-full max-w-[200px] ${
                   index === 6 ? "md:col-start-2" : ""
                 }`}
                 variants={cardVariants}
@@ -185,14 +202,12 @@ const About = () => {
               >
                 <img
                   src={member.avatar}
-                  alt="عضو فريق العمل"
-                  className="w-24 h-24 rounded-full object-cover shadow-md mb-2"
+                  alt={member.name}
+                  className="w-20 h-20 rounded-full object-cover shadow-md mb-3 border-3 border-[var(--color-mint)]"
                 />
-                {/* {member.title && (
-                  <p className="text-xs font-semibold !text-[var(--color-ink-muted)]">
-                    {member.title}
-                  </p>
-                )} */}
+                <p className="text-sm font-bold !text-[var(--color-ink)] leading-tight">
+                  {member.name}
+                </p>
               </motion.div>
             ))}
           </motion.div>
