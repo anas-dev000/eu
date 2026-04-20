@@ -12,70 +12,70 @@ export const screeningQuestions = [
     question: "إذا أشرت إلى شيء في الغرفة، هل ينظر طفلك إليه؟",
     example: "مثلاً: إذا أشرت إلى لعبة أو حيوان، هل يلتفت لينظر إليه؟",
     riskAnswer: "no", // الإجابة "لا" تشير للخطر
-    icon: "👆",
+    icon: "Pointer",
   },
   {
     id: 2,
     question: "هل يلعب طفلك ألعاب التخيل أو التمثيل؟",
     example: "مثلاً: يتظاهر بالشرب من كوب فارغ، أو يتظاهر بإطعام دمية",
     riskAnswer: "no",
-    icon: "🧸",
+    icon: "Shapes",
   },
   {
     id: 3,
     question: "هل يشير طفلك بإصبعه ليريك شيئاً يثير اهتمامه؟",
     example: "مثلاً: يشير إلى طائرة في السماء أو شاحنة كبيرة في الشارع",
     riskAnswer: "no",
-    icon: "☝️",
+    icon: "Hand",
   },
   {
     id: 4,
     question: "هل يهتم طفلك بالأطفال الآخرين؟",
     example: "مثلاً: هل يراقبهم أو يحاول اللعب معهم أو الاقتراب منهم؟",
     riskAnswer: "no",
-    icon: "👫",
+    icon: "Users",
   },
   {
     id: 5,
     question: "هل يستجيب طفلك عندما تناديه باسمه؟",
     example: "مثلاً: هل يلتفت إليك أو ينظر لك عندما تنادي اسمه؟",
     riskAnswer: "no",
-    icon: "📢",
+    icon: "Megaphone",
   },
   {
     id: 6,
     question: "عندما تبتسم لطفلك، هل يبتسم لك؟",
     example: "هل يردّ الابتسامة تلقائياً عندما تبتسم له؟",
     riskAnswer: "no",
-    icon: "😊",
+    icon: "Smile",
   },
   {
     id: 7,
     question: "هل ينزعج طفلك من الأصوات اليومية العادية؟",
     example: "مثلاً: صوت الخلاط، المكنسة الكهربائية، أو الموسيقى العالية",
     riskAnswer: "yes", // هنا الإجابة "نعم" تشير للخطر
-    icon: "🔊",
+    icon: "Volume2",
   },
   {
     id: 8,
     question: "هل ينظر طفلك في عينيك عندما تتحدث معه أو تلعب معه؟",
     example: "هل يحافظ على التواصل البصري أثناء التفاعل معك؟",
     riskAnswer: "no",
-    icon: "👀",
+    icon: "Eye",
   },
   {
     id: 9,
     question: "هل يحاول طفلك تقليد ما تفعله؟",
     example: "مثلاً: التلويح بيده للوداع، التصفيق، أو تقليد الأصوات",
     riskAnswer: "no",
-    icon: "🪞",
+    icon: "Repeat",
   },
   {
     id: 10,
     question: "إذا حدث شيء جديد أو غريب، هل ينظر طفلك إلى وجهك ليعرف ردة فعلك؟",
     example: "مثلاً: سماع صوت غريب أو رؤية شخص جديد",
     riskAnswer: "no",
-    icon: "🤔",
+    icon: "Brain",
   },
 ];
 
@@ -112,7 +112,7 @@ export const levels = {
     color: "var(--color-mint)",
     colorLight: "var(--color-mint-light)",
     colorDark: "var(--color-mint-dark)",
-    emoji: "💚",
+    icon: "Heart",
     scoreRange: "0 – 2",
     description:
       "بناءً على إجاباتك، يبدو أن طفلك يُظهر مؤشرات طبيعية في معظم مجالات التواصل والتفاعل الاجتماعي. قد يحتاج إلى دعم بسيط في بعض المهارات، وهو أمر شائع وطبيعي في مراحل النمو.",
@@ -135,7 +135,7 @@ export const levels = {
     color: "var(--color-apricot)",
     colorLight: "var(--color-apricot-light)",
     colorDark: "var(--color-apricot-dark)",
-    emoji: "🧡",
+    icon: "HeartPulse",
     scoreRange: "3 – 6",
     description:
       "بناءً على إجاباتك، قد يُظهر طفلك بعض الصعوبات في مجالات التواصل والتفاعل الاجتماعي. هذا لا يعني بالضرورة وجود اضطراب، لكن ننصح بمتابعة مع مختص لتقييم أدق.",
@@ -159,7 +159,7 @@ export const levels = {
     color: "var(--color-lavender)",
     colorLight: "var(--color-lavender-light)",
     colorDark: "var(--color-lavender-dark)",
-    emoji: "💜",
+    icon: "HeartHandshake",
     scoreRange: "7 – 10",
     description:
       "بناءً على إجاباتك، يُظهر طفلك عدة مؤشرات تستدعي تقييماً متخصصاً. نرجو ألا تقلقوا — التشخيص المبكر والتدخل المناسب يفتحان آفاقاً واسعة لتطور طفلكم.",
@@ -184,7 +184,7 @@ export const levels = {
  * نص التنبيه الطبي
  */
 export const medicalDisclaimer = {
-  title: "⚕️ تنبيه مهم",
+  title: "تنبيه مهم",
   text: "هذا الاختبار هو أداة فحص أولي فقط وليس تشخيصاً طبياً. لا يمكن تشخيص اضطراب طيف التوحد إلا من قبل فريق طبي متخصص من خلال تقييم سريري شامل. إذا كانت لديكم أي مخاوف بشأن نمو طفلكم، يُرجى استشارة طبيب الأطفال.",
   source: "مبني على أسئلة M-CHAT-R/F — أداة فحص معتمدة عالمياً",
 };

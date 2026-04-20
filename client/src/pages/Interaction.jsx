@@ -23,6 +23,7 @@ import {
   Info,
   AlertTriangle,
 } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import {
   screeningQuestions,
   calculateScore,
@@ -272,6 +273,70 @@ const Interaction = () => {
                     لعبة تفاعلية
                   </div>
                 </motion.button>
+
+                {/* ── Medical Disclaimer & Source Card ── */}
+                <motion.div
+                  variants={itemVariants}
+                  className="md:col-span-2 mt-4 relative overflow-hidden rounded-[2rem] p-8 md:p-10 border border-[var(--color-sky-calm-light)]"
+                  style={{
+                    background: "linear-gradient(145deg, rgba(255,255,255,0.9), rgba(245,246,248,0.95))",
+                    boxShadow: "0 20px 60px rgba(0,0,0,0.05)",
+                  }}
+                >
+                  {/* Decorative blobs */}
+                  <div className="absolute -top-20 -left-20 w-64 h-64 bg-[var(--color-sky-calm)]/10 blur-[80px] rounded-full" />
+                  <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[var(--color-apricot)]/10 blur-[80px] rounded-full" />
+
+                  <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                    {/* Disclaimer */}
+                    <div>
+                      <div className="flex items-center gap-4 mb-5">
+                        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--color-apricot)] to-[var(--color-apricot-dark)] flex items-center justify-center shadow-lg shadow-[var(--color-apricot-light)]">
+                          <AlertTriangle size={28} className="text-white" />
+                        </div>
+                        <h3 className="text-2xl font-black text-[var(--color-ink)]">
+                          {medicalDisclaimer.title}
+                        </h3>
+                      </div>
+                      <p className="text-[var(--color-ink-muted)] leading-[1.9] text-base mb-6 text-justify">
+                        {medicalDisclaimer.text}
+                      </p>
+                    </div>
+
+                    {/* Source Info */}
+                    <div className="bg-white/60 p-6 md:p-8 rounded-[1.5rem] border border-white shadow-sm backdrop-blur-sm relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-2 h-full bg-gradient-to-b from-[var(--color-mint)] to-[var(--color-mint-dark)]" />
+                      
+                      <div className="flex items-center gap-3 mb-5">
+                        <div className="w-10 h-10 rounded-xl bg-[var(--color-mint-light)] flex items-center justify-center">
+                          <Shield size={20} className="text-[var(--color-mint-dark)]" />
+                        </div>
+                        <h4 className="font-bold text-lg text-[var(--color-ink)]">مصدر علمي موثوق</h4>
+                      </div>
+                      
+                      <ul className="space-y-4">
+                        <li className="flex items-start gap-3">
+                          <CheckCircle2 size={18} className="mt-1 text-[var(--color-mint-dark)] shrink-0" />
+                          <p className="text-sm text-[var(--color-ink-light)] leading-relaxed">
+                            <strong className="text-[var(--color-ink)] font-bold">الأداة المرجعية:</strong> مبني على أسئلة M-CHAT-R/F (أداة فحص معتمدة عالمياً).
+                          </p>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <CheckCircle2 size={18} className="mt-1 text-[var(--color-mint-dark)] shrink-0" />
+                          <p className="text-sm text-[var(--color-ink-light)] leading-relaxed">
+                            <strong className="text-[var(--color-ink)] font-bold">الاعتماد:</strong> موصى به من الأكاديمية الأمريكية لطب الأطفال (AAP) ومراكز السيطرة على الأمراض (CDC).
+                          </p>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <CheckCircle2 size={18} className="mt-1 text-[var(--color-mint-dark)] shrink-0" />
+                          <p className="text-sm text-[var(--color-ink-light)] leading-relaxed">
+                            <strong className="text-[var(--color-ink)] font-bold">المصدر الأصلي:</strong> تم تطويره وتحديثه بواسطة الباحثين Robins, Fein, & Barton.
+                          </p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </motion.div>
               </motion.div>
             )}
 
@@ -372,8 +437,11 @@ const Interaction = () => {
                     <div className="p-8 md:p-12">
                       {/* question emoji & number */}
                       <div className="flex items-center justify-center gap-4 mb-8">
-                        <div className="text-5xl">
-                          {screeningQuestions[currentQ].icon}
+                        <div className="text-5xl text-[var(--color-sky-calm-dark)]">
+                          {(() => {
+                            const IconComponent = LucideIcons[screeningQuestions[currentQ].icon] || LucideIcons.HelpCircle;
+                            return <IconComponent size={48} strokeWidth={1.5} />;
+                          })()}
                         </div>
                         <div
                           className="w-12 h-12 rounded-2xl flex items-center justify-center font-black text-lg text-white shadow-lg"
@@ -518,12 +586,15 @@ const Interaction = () => {
                                 transition={{ delay: 0.5 }}
                               />
                               <div
-                                className="w-28 h-28 rounded-full flex items-center justify-center text-5xl shadow-xl relative z-10"
+                                className="w-28 h-28 rounded-full flex items-center justify-center shadow-xl relative z-10 text-white"
                                 style={{
                                   background: `linear-gradient(135deg, ${levelData.colorLight}, ${levelData.color})`,
                                 }}
                               >
-                                {levelData.emoji}
+                                {(() => {
+                                  const LevelIcon = LucideIcons[levelData.icon] || LucideIcons.Heart;
+                                  return <LevelIcon size={56} strokeWidth={2} />;
+                                })()}
                               </div>
                             </div>
 
